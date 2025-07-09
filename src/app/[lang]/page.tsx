@@ -72,7 +72,7 @@ const Page = observer(() => {
 
       <main className="flex-1 container mx-auto py-12 px-4 md:px-8">
         {/* Filters */}
-        <div className="bg-inherit rounded-xl shadow-md p-6 mb-10">
+        <div className="bg-inherit rounded-xl p-6 mb-10">
           <h3 className="text-3xl font-bold mb-4 text-cyan-500 text-center">{t('categories')}</h3>
           <div className="flex flex-wrap gap-4">
             <button
@@ -101,7 +101,7 @@ const Page = observer(() => {
           </div>
         </div>
 
-        <section className="bg-inherit rounded-xl p-6 shadow-inner">
+        <section className="bg-inherit rounded-xl p-6">
           {bookStore.loading ? (
             <div className="flex justify-center items-center space-x-2 py-20">
               <svg
@@ -146,7 +146,7 @@ const Page = observer(() => {
               {bookStore.filteredBooks.map((book) => (
                 <article
                   key={book.id}
-                  className="rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition"
+                  className="rounded-2xl shadow-md shadow-white overflow-hidden flex flex-col hover:shadow-lg transition"
                 >
                   <div className="h-64 flex items-center justify-center overflow-hidden">
                     <img

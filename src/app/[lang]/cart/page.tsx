@@ -8,12 +8,15 @@ import Footer from '@/app/components/Footer';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
 import i18n from '@/i18n';
+import confetti from 'canvas-confetti';
+import { useRouter } from 'next/navigation';
 
 const CUSTOMER_ID = 1;
 
 const CartPage = observer(() => {
   const { t } = useTranslation('translation');
   const params = useParams();
+  const router = useRouter();
   const lang = typeof params.lang === 'string' ? params.lang : params.lang?.[0] ?? 'en';
 
   useEffect(() => {
@@ -33,7 +36,16 @@ const CartPage = observer(() => {
   };
 
   const handlePayment = () => {
-    cartStore.processPayment();
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 },
+    });
+    cartStore.removeItemsFromCart();
+    cartStore.processPayment(CUSTOMER_ID, CUSTOMER_ID);
+    setTimeout(() => {
+      router.push(`/${lang}/orders`);
+    }, 1000);
   };
 
   if (cartStore.loading) {
@@ -73,8 +85,8 @@ const CartPage = observer(() => {
     <div>
       <Navbar cartCount={cartStore.totalItems} />
       <div className="container mx-auto py-8 px-4">
-        <h2 className="text-3xl font-bold mb-6">{t('cart')}</h2>
-        
+        <h2 className="text-3xl font-bold mb-6 text-white">{t('cart')}</h2>
+
         {cartStore.isEmpty ? (
           <div className="text-center py-20">
             <svg
@@ -94,10 +106,10 @@ const CartPage = observer(() => {
           </div>
         ) : (
           <>
-            <div className="rounded-xl shadow-lg overflow-hidden">
-              <table className="min-w-full">
+            <div className="rounded-xl overflow-hidden">
+              <table className="min-w-full border border-white rounded-xl">
                 <thead>
-                  <tr>
+                  <tr className='border-b border-white'>
                     <th className="py-4 px-6 text-left text-sm font-bold text-white">{t('book')}</th>
                     <th className="py-4 px-6 text-center text-sm font-bold text-white">{t('quantity')}</th>
                     <th className="py-4 px-6 text-right text-sm font-bold text-white">{t('price')}</th>
@@ -114,25 +126,23 @@ const CartPage = observer(() => {
                           <button
                             onClick={() => handleDecreaseQuantity(item.id)}
                             disabled={cartStore.updatingItems[item.id]}
-                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-colors ${
-                              cartStore.updatingItems[item.id]
-                                ? 'bg-gray-100 border-gray-300 text-white cursor-not-allowed'
-                                : 'border-gray-300 text-white hover:border-gray-400'
-                            }`}
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-colors ${cartStore.updatingItems[item.id]
+                              ? 'bg-gray-100 border-gray-300 text-white cursor-not-allowed'
+                              : 'border-gray-300 text-white hover:border-gray-400'
+                              }`}
                           >
                             {cartStore.updatingItems[item.id] ? '...' : '-'}
                           </button>
-                          <span className="mx-3 text-sm font-medium min-w-[2rem] text-center">
+                          <span className="mx-3 text-sm font-medium min-w-[2rem] text-center text-white">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => handleIncreaseQuantity(item.id)}
                             disabled={cartStore.updatingItems[item.id]}
-                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-colors ${
-                              cartStore.updatingItems[item.id]
-                                ? 'bg-gray-100 border-gray-300 text-white cursor-not-allowed'
-                                : 'border-gray-300 hover:border-gray-400'
-                            }`}
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-colors ${cartStore.updatingItems[item.id]
+                              ? 'bg-gray-100 border-gray-300 text-white cursor-not-allowed'
+                              : 'border-gray-300 hover:border-gray-400 text-white'
+                              }`}
                           >
                             {cartStore.updatingItems[item.id] ? '...' : '+'}
                           </button>
@@ -159,7 +169,7 @@ const CartPage = observer(() => {
                 </div>
                 <button
                   onClick={handlePayment}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200"
                 >
                   {t('completePayment')}
                 </button>

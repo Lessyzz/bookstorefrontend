@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { getBooks } from '@/api/books';
-import { updateCartItem } from '@/api/cart';
+import { buy, updateCartItem } from '@/api/cart';
 
 export interface Book {
   id: number;

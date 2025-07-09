@@ -4,8 +4,14 @@ export async function getOrders(customerId: number) {
   return res.json();
 }
 
-export async function getOrder(id: number) {
+export async function getOrdersById(id: number) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/${id}`);
+  if (!res.ok) throw new Error('Failed to fetch order');
+  return res.json();
+}
+
+export async function getOrderItems(id: number) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/order-items/${id}`);
   if (!res.ok) throw new Error('Failed to fetch order');
   return res.json();
 }

@@ -1,5 +1,7 @@
+import { authStore } from '@/stores/AuthStore';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
     cartCount: number;
@@ -7,16 +9,29 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ cartCount }) => {
     const params = useParams();
+    const router = useRouter();
     const lang = typeof params.lang === 'string' ? params.lang : params.lang?.[0] ?? 'en';
 
-    return (
-        <nav className="bg-inherit shadow-md py-4 px-8 flex items-center justify-between sticky top-0 z-50">
+    return ( // sticky
+        <nav className="bg-inherit py-4 px-8 flex items-center justify-between top-0 z-50">
             <Link href={`/${lang}`} className="text-3xl font-extrabold text-white transition">
                 BookStore
             </Link>
             <div className="flex items-center gap-8">
-                {/* <Link href="/" className="hover:text-blue-600 font-semibold transition">Kitaplar</Link> */}
-                <Link href={`/${lang}/cart`} className="relative font-semibold transition" aria-label="Sepet">
+                <Link href={`/${lang}/orders`} className="text-white hover:text-white font-semibold transition">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-7 h-7"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v1.5M3 7.5h18M3 7.5v10.125A2.625 2.625 0 005.625 20.25h12.75A2.625 2.625 0 0021 17.625V7.5M7.5 11.25h9m-9 3h6" />
+                    </svg>
+                </Link>
+
+                <Link href={`/${lang}/cart`} className="relative font-semibold transition text-white" aria-label="Sepet">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24"
@@ -32,6 +47,39 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount }) => {
                         </span>
                     )}
                 </Link>
+
+                <div className="flex items-center gap-8">
+                    {authStore.isAuthenticated ? (
+                        <>
+                            <button
+                                onClick={() => router.push(`/${lang}/profile`)}
+                                className="flex items-center text-white font-semibold"
+                                aria-label="Profile"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6 mr-2"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.75z" />
+                                </svg>
+                            </button>
+                            {/* <button
+                                onClick={() => { authStore.logout(); router.push(`/${lang}`) }}
+                                className="text-white hover:text-red-500 font-semibold transition"
+                            >
+                                Logout
+                            </button> */}
+                        </>
+                    ) : (
+                        <Link href={`/${lang}/login`} className="text-white hover:text-blue-500 font-semibold transition">
+                            Login
+                        </Link>
+                    )}
+                </div>
             </div>
         </nav>
     );

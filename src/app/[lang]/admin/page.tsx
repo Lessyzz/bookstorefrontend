@@ -95,7 +95,7 @@ const AdminPage = observer(() => {
   return (
     <div className="container mx-auto py-10 px-4">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-4 text-center">{t('stockManagementSystem')}</h2>
+        <h2 className="text-3xl font-bold mb-4 text-center text-white">{t('stockManagementSystem')}</h2>
         
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -168,7 +168,7 @@ const AdminPage = observer(() => {
                     </td>
                     <td className="py-3 px-4">
                       {stockEdit[book.id] !== undefined ? (
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 text-white">
                           <input
                             type="number"
                             value={stockEdit[book.id]}
@@ -203,7 +203,7 @@ const AdminPage = observer(() => {
                             onClick={() => startEditingStock(book.id, book.stockQuantity)}
                             className="text-cyan-500 hover:text-cyan-400 text-sm"
                           >
-                            Edit
+                            {t('edit')}
                           </button>
                         </div>
                       )}

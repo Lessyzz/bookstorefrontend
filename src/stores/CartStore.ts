@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { getCart, updateCartItem } from '@/api/cart';
+import { buy, getCart, updateCartItem } from '@/api/cart';
+import { bookStore } from './BookStore';
 
 export interface CartItem {
   id: number;
@@ -69,7 +70,6 @@ export class CartStore {
         const cartItem = this.cart.find(item => item.id === itemId);
         if (cartItem) {
           if (cartItem.quantity <= 1) {
-            // Eğer miktar 1'se, item'ı sepetten kaldır
             this.cart = this.cart.filter(item => item.id !== itemId);
           } else {
             cartItem.quantity -= 1;
@@ -89,9 +89,13 @@ export class CartStore {
     this.cart = this.cart.filter(item => item.id !== itemId);
   }
 
-  processPayment() {
-    // Ödeme işlemi simülasyonu
-    alert('Proceeding to payment...');
+  async processPayment(customerId: number, cartId: number) {
+    await buy(customerId, cartId);
+  }
+
+  removeItemsFromCart() {
+    this.cart = [];
+    bookStore.cartCount = 0;
   }
 
   clearCart() {

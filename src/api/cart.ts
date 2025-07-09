@@ -19,3 +19,18 @@ export async function updateCartItem(customerId: number, cartId: number, bookId:
 
   return res.json();
 }
+
+
+export async function buy(customerId: number, cartId: number) {
+  const update = { customerId, cartId };
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shoppingcart/buy`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(update),
+  });
+
+  if (!res.ok) throw new Error('Failed to update cart item');
+
+  return res;
+}
